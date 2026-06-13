@@ -38,6 +38,13 @@ class GameStateOverride(GameExecutables):
         self.fs_modifier_symbol = self.modifier_symbol
         self.fs_modifier_mult = self.modifier_mult
 
+    def update_final_win(self) -> None:
+        """Round wins to 0.1x bet increments for RGS publish format."""
+        self.win_manager.running_bet_win = round(self.win_manager.running_bet_win, 1)
+        self.win_manager.basegame_wins = round(self.win_manager.basegame_wins, 1)
+        self.win_manager.freegame_wins = round(self.win_manager.freegame_wins, 1)
+        super().update_final_win()
+
     def check_game_repeat(self):
         if self.repeat is False:
             win_criteria = self.get_current_betmode_distributions().get_win_criteria()

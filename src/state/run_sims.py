@@ -1,5 +1,6 @@
 import time
 import math
+import os
 import random
 import hashlib
 from multiprocessing import Process, Manager
@@ -37,6 +38,10 @@ def create_books(
 
     startTime = time.time()
     print("\nCreating books...")
+    temp_path = gamestate.output_files.temp_path
+    if os.path.exists(temp_path):
+        shutil.rmtree(temp_path)
+    os.makedirs(temp_path)
     for betmode_name in num_sim_args:
         sim_counter = 0
         for bm in config.bet_modes:

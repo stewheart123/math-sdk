@@ -18,7 +18,7 @@ class GameConfig(Config):
         super().__init__()
         self.game_id = "card_ways"
         self.provider_number = 0
-        self.working_name = "Card Ways"
+        self.working_name = "CARDZ"
         self.wincap = 5000
         self.win_type = "ways"
         self.rtp = 0.97
@@ -28,27 +28,24 @@ class GameConfig(Config):
         self.num_rows = [2] * self.num_reels
 
         self.paytable = {
-            (5, "A"): 10,
-            (4, "A"): 5,
-            (3, "A"): 2,
-            (5, "K"): 8,
-            (4, "K"): 4,
-            (3, "K"): 1.5,
-            (5, "Q"): 6,
-            (4, "Q"): 3,
-            (3, "Q"): 1.2,
-            (5, "J"): 5,
-            (4, "J"): 2.5,
-            (3, "J"): 1,
-            (5, "10"): 4,
-            (4, "10"): 2,
-            (3, "10"): 0.8,
-            (5, "9"): 3,
-            (4, "9"): 1.5,
-            (3, "9"): 0.6,
-            (5, "8"): 2,
-            (4, "8"): 1,
-            (3, "8"): 0.4,
+            (5, "A"): 3.2,
+            (4, "A"): 2.6,
+            (3, "A"): 2.1,
+            (5, "K"): 3.0,
+            (4, "K"): 2.4,
+            (3, "K"): 1.9,
+            (5, "Q"): 2.7,
+            (4, "Q"): 2.1,
+            (3, "Q"): 1.6,
+            (5, "J"): 2.4,
+            (4, "J"): 1.9,
+            (3, "J"): 1.4,
+            (5, "10"): 2.2,
+            (4, "10"): 1.8,
+            (3, "10"): 1.3,
+            (5, "9"): 2.0,
+            (4, "9"): 1.6,
+            (3, "9"): 1.2,
         }
 
         self.include_padding = True
@@ -56,6 +53,7 @@ class GameConfig(Config):
             "wild": ["W"],
             "scatter": ["S"],
             "modifier": ["X1", "X2", "X3"],
+            "non_winnable": ["N"],
         }
 
         self.modifier_values = {"X1": 1, "X2": 2, "X3": 3}

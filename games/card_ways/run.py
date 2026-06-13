@@ -10,22 +10,22 @@ from src.write_data.write_configs import generate_configs
 
 if __name__ == "__main__":
 
-    num_threads = 10
+    num_threads = 4
     rust_threads = 20
     batching_size = 50000
-    compression = False
+    compression = True
     profiling = False
 
     num_sim_args = {
-        "base": int(1e3),
-        "bonus": int(1e3),
+        "base": 500,
+        "bonus": 500,
     }
 
     run_conditions = {
         "run_sims": True,
         "run_optimization": False,
         "run_analysis": False,
-        "run_format_checks": False,
+        "run_format_checks": True,
     }
     target_modes = ["base", "bonus"]
 
