@@ -33,7 +33,7 @@ class GameState(GameStateOverride):
         self.start_freespin_modifier()
         modifier_reveal_event(self, persists=True)
 
-        while self.fs < self.tot_fs:
+        while self.fs < self.tot_fs and not self.wincap_triggered:
             self.update_freespin()
             self.draw_board(emit_event=True)
 

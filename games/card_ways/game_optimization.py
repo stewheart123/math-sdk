@@ -27,43 +27,16 @@ class OptimizationSetup:
                     ).return_dict(),
                     "0": ConstructConditions(rtp=0, av_win=0, search_conditions=0).return_dict(),
                     "freegame": ConstructConditions(
-                        rtp=0.37, hr=200, search_conditions={"symbol": "scatter"}
+                        rtp=0.37, hr=17, search_conditions={"symbol": "scatter"}
                     ).return_dict(),
-                    "basegame": ConstructConditions(hr=3.5, rtp=0.59).return_dict(),
+                    "basegame": ConstructConditions(hr=6, rtp=0.59).return_dict(),
                 },
-                "scaling": ConstructScaling(
-                    [
-                        {
-                            "criteria": "basegame",
-                            "scale_factor": 1.2,
-                            "win_range": (1, 2),
-                            "probability": 1.0,
-                        },
-                        {
-                            "criteria": "basegame",
-                            "scale_factor": 1.5,
-                            "win_range": (10, 20),
-                            "probability": 1.0,
-                        },
-                        {
-                            "criteria": "freegame",
-                            "scale_factor": 0.8,
-                            "win_range": (1000, 2000),
-                            "probability": 1.0,
-                        },
-                        {
-                            "criteria": "freegame",
-                            "scale_factor": 1.2,
-                            "win_range": (3000, 4000),
-                            "probability": 1.0,
-                        },
-                    ]
-                ).return_dict(),
+                "scaling": ConstructScaling([]).return_dict(),
                 "parameters": ConstructParameters(
                     num_show=5000,
                     num_per_fence=10000,
-                    min_m2m=4,
-                    max_m2m=8,
+                    min_m2m=1,
+                    max_m2m=30,
                     pmb_rtp=1.0,
                     sim_trials=5000,
                     test_spins=[50, 100, 200],
@@ -71,9 +44,9 @@ class OptimizationSetup:
                     score_type="rtp",
                 ).return_dict(),
                 "distribution_bias": ConstructFenceBias(
-                    applied_criteria=["basegame"],
-                    bias_ranges=[(1.5, 3.5)],
-                    bias_weights=[0.4],
+                    applied_criteria=[],
+                    bias_ranges=[],
+                    bias_weights=[],
                 ).return_dict(),
             },
             "bonus": {
@@ -108,13 +81,18 @@ class OptimizationSetup:
                 "parameters": ConstructParameters(
                     num_show=5000,
                     num_per_fence=10000,
-                    min_m2m=4,
-                    max_m2m=8,
+                    min_m2m=1,
+                    max_m2m=30,
                     pmb_rtp=1.0,
                     sim_trials=5000,
                     test_spins=[10, 20, 50],
                     test_weights=[0.6, 0.2, 0.2],
                     score_type="rtp",
+                ).return_dict(),
+                "distribution_bias": ConstructFenceBias(
+                    applied_criteria=[],
+                    bias_ranges=[],
+                    bias_weights=[],
                 ).return_dict(),
             },
         }

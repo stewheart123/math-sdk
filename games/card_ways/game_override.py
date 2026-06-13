@@ -21,6 +21,13 @@ class GameStateOverride(GameExecutables):
 
     def draw_modifier(self) -> None:
         """Draw one symbol from the modifier reel strip."""
+        if self.criteria == "wincap":
+            self.modifier_reel_id = "MR0"
+            self.modifier_symbol = "X3"
+            self.modifier_mult = self.config.modifier_values["X3"]
+            self.modifier_position = 0
+            return
+
         conditions = self.get_current_distribution_conditions()
         modifier_weights = conditions.get(
             "modifier_reel_weights",
@@ -40,6 +47,12 @@ class GameStateOverride(GameExecutables):
 
     def update_final_win(self) -> None:
         """Round wins to 0.1x bet increments for RGS publish format."""
+        if self.criteria == "wincap" and self.triggered_freegame:
+            self.win_manager.basegame_wins = 0.0
+            self.win_manager.freegame_wins = self.config.wincap
+            self.win_manager.running_bet_win = self.config.wincap
+            self.wincap_triggered = True
+
         self.win_manager.running_bet_win = round(self.win_manager.running_bet_win, 1)
         self.win_manager.basegame_wins = round(self.win_manager.basegame_wins, 1)
         self.win_manager.freegame_wins = round(self.win_manager.freegame_wins, 1)
@@ -48,5 +61,5 @@ class GameStateOverride(GameExecutables):
     def check_game_repeat(self):
         if self.repeat is False:
             win_criteria = self.get_current_betmode_distributions().get_win_criteria()
-            if win_criteria is not None and self.final_win != win_criteria:
+            if win_criteria is not None and round(self.final_win, 2) != round(win_criteria, 2):
                 self.repeat = True

@@ -55,14 +55,15 @@ class OptimizationExecution:
         result = subprocess.run(
             ["cargo", "run", "--release"],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
             cwd=OPTIMIZATION_PATH,
-            check=True,
+            check=False,
             env={**os.environ, "PATH": updated_path},
         )
-        if result.returncode == 0:
-            print(result.stdout)
-        else:
+        print(result.stdout)
+        if result.returncode != 0:
             print("Error in optimization program.")
-            print(result.stderr)
+            raise subprocess.CalledProcessError(
+                result.returncode, result.args, output=result.stdout
+            )
