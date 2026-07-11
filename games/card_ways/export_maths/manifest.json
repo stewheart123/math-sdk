@@ -1,0 +1,50 @@
+{
+  "config": "config_fe_card_ways.json",
+  "books": {
+    "base": "books_base.jsonl",
+    "bonus_3": "books_bonus_3.jsonl",
+    "bonus_4": "books_bonus_4.jsonl",
+    "bonus_5": "books_bonus_5.jsonl"
+  },
+  "curated_samples": {
+    "base": {
+      "file": "samples/base_samples.json",
+      "scenarios": [
+        "base_zero",
+        "base_win",
+        "base_freegame_10",
+        "base_freegame_15",
+        "modifier_x2",
+        "modifier_x3",
+        "any_win"
+      ]
+    },
+    "bonus_3": {
+      "file": "samples/bonus_3_samples.json",
+      "scenarios": [
+        "bonus_3_win",
+        "bonus_3_modifier_x2",
+        "bonus_3_modifier_x3",
+        "bonus_3_spins"
+      ]
+    },
+    "bonus_4": {
+      "file": "samples/bonus_4_samples.json",
+      "scenarios": [
+        "bonus_4_win",
+        "bonus_4_modifier_x2",
+        "bonus_4_modifier_x3",
+        "bonus_4_spins"
+      ]
+    },
+    "bonus_5": {
+      "file": "samples/bonus_5_samples.json",
+      "scenarios": [
+        "bonus_5_win",
+        "bonus_5_modifier_x2",
+        "bonus_5_modifier_x3",
+        "bonus_5_spins"
+      ]
+    }
+  }
+}

@@ -21,7 +21,7 @@ class GameConfig(Config):
         self.working_name = "CARDZ"
         self.wincap = 5000
         self.win_type = "ways"
-        self.rtp = 0.97
+        self.rtp = 0.965
         self.construct_paths()
 
         self.num_reels = 5
@@ -60,7 +60,7 @@ class GameConfig(Config):
         self.num_modifier_slots = 1
 
         self.freespin_triggers = {
-            self.basegame_type: {3: 10, 4: 10, 5: 10},
+            self.basegame_type: {3: 10, 4: 15, 5: 20},
             self.freegame_type: {},
         }
         self.anticipation_triggers = {self.basegame_type: 2, self.freegame_type: 0}
@@ -79,7 +79,61 @@ class GameConfig(Config):
             self.freegame_type: {"MR0": 1},
         }
 
-        mode_maxwins = {"base": 5000, "bonus": 5000}
+        mode_maxwins = {
+            "base": 5000,
+            "bonus_3": 5000,
+            "bonus_4": 5000,
+            "bonus_5": 5000,
+        }
+
+        bonus_buy_tiers = [
+            ("bonus_3", 70.0, {3: 1}),
+            ("bonus_4", 100.0, {4: 1}),
+            ("bonus_5", 130.0, {5: 1}),
+        ]
+
+        def make_bonus_buy_mode(name, cost, scatter_triggers):
+            max_win = mode_maxwins[name]
+            return BetMode(
+                name=name,
+                cost=cost,
+                rtp=self.rtp,
+                max_win=max_win,
+                auto_close_disabled=False,
+                is_feature=False,
+                is_buybonus=True,
+                distributions=[
+                    Distribution(
+                        criteria="wincap",
+                        quota=0.001,
+                        win_criteria=max_win,
+                        conditions={
+                            "reel_weights": {
+                                self.basegame_type: {"BR0": 1},
+                                self.freegame_type: {"FR0": 1, "FRWCAP": 5},
+                            },
+                            "modifier_reel_weights": modifier_reel_weights,
+                            "force_wincap": True,
+                            "force_freegame": True,
+                            "scatter_triggers": scatter_triggers,
+                        },
+                    ),
+                    Distribution(
+                        criteria="freegame",
+                        quota=0.999,
+                        conditions={
+                            "reel_weights": {
+                                self.basegame_type: {"BR0": 1},
+                                self.freegame_type: {"FR0": 9, "FRWCAP": 1},
+                            },
+                            "modifier_reel_weights": modifier_reel_weights,
+                            "force_wincap": False,
+                            "force_freegame": True,
+                            "scatter_triggers": scatter_triggers,
+                        },
+                    ),
+                ],
+            )
 
         self.bet_modes = [
             BetMode(
@@ -143,44 +197,4 @@ class GameConfig(Config):
                     ),
                 ],
             ),
-            BetMode(
-                name="bonus",
-                cost=100.0,
-                rtp=self.rtp,
-                max_win=mode_maxwins["bonus"],
-                auto_close_disabled=False,
-                is_feature=False,
-                is_buybonus=True,
-                distributions=[
-                    Distribution(
-                        criteria="wincap",
-                        quota=0.001,
-                        win_criteria=mode_maxwins["bonus"],
-                        conditions={
-                            "reel_weights": {
-                                self.basegame_type: {"BR0": 1},
-                                self.freegame_type: {"FR0": 1, "FRWCAP": 5},
-                            },
-                            "modifier_reel_weights": modifier_reel_weights,
-                            "force_wincap": True,
-                            "force_freegame": True,
-                            "scatter_triggers": {3: 100, 4: 20, 5: 5},
-                        },
-                    ),
-                    Distribution(
-                        criteria="freegame",
-                        quota=0.999,
-                        conditions={
-                            "reel_weights": {
-                                self.basegame_type: {"BR0": 1},
-                                self.freegame_type: {"FR0": 9, "FRWCAP": 1},
-                            },
-                            "modifier_reel_weights": modifier_reel_weights,
-                            "force_wincap": False,
-                            "force_freegame": True,
-                            "scatter_triggers": {3: 100, 4: 20, 5: 5},
-                        },
-                    ),
-                ],
-            ),
-        ]
+        ] + [make_bonus_buy_mode(name, cost, scatter_triggers) for name, cost, scatter_triggers in bonus_buy_tiers]
