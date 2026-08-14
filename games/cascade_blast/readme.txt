@@ -6,6 +6,7 @@
 
 * Paying: H1, H2, H3, H4, L1, L2, L3, L4 (hierarchy high to low)
 * Special: S (free spins), SA, SB (explosives)
+* Filler: N (does not pay). Needed so 8-of-a-kind is not almost automatic on a 7x7 with only 8 paying symbols.
 * No wilds in v1
 
 Pays start at 8-of-a-kind anywhere. Bands: (8), (9-10), (11-13), (14-49).
@@ -31,14 +32,18 @@ Checked only after paying wins have fully resolved.
 
 ## Bonus buys
 
-* bonus_hotspots (5x): 5 unique bonus-area cells on the same 7x7 frame.
-* bonus_volatile (10x): at least one SA+SB pair after the first pay settle (force-placed if needed). All explosions this spin are volatile, including extra pairs that form later.
-* bonus_fs (25x): always enter 10 free spins after the base spin settles, even if S drifted off the highlight.
+* bonus_hotspots (2.3x): 5 unique bonus-area cells on the same 7x7 frame.
+* bonus_volatile (15.7x): VR0 paying-dense reels, 3 bonus tiles, at least 3 volatile blasts per spin. Extra natural pairs also explode volatile.
+* bonus_fs (17.8x): always enter 10 free spins after the base spin settles, even if S drifted off the highlight.
 
-Costs are placeholders until hit-rates are measured.
+Buy costs snapped to EV / 0.965 from the natural probe.
 
 bonus_volatile has no 0-win simulation fence: a guaranteed explosion almost always pays, so forcing 0x books does not terminate.
 
 ## v1 notes
 
-Reel weights and pay values are a first pass. Run books, inspect library/books, then retune. Optimizer is disabled in run.py.
+Pass 2 nerfed 8-count pays and added filler N. Probe natural rates with:
+
+    python games/cascade_blast/measure_natural.py
+
+Optimizer is still disabled in run.py.

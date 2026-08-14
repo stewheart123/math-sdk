@@ -13,9 +13,9 @@ def _base_like_params(wincap: float, include_zero: bool = True) -> dict:
     conditions = {
         "wincap": ConstructConditions(rtp=0.01, av_win=wincap, search_conditions=wincap).return_dict(),
         "freegame": ConstructConditions(
-            rtp=0.37, hr=200, search_conditions={"symbol": "scatter"}
+            rtp=0.295, hr=55, search_conditions={"symbol": "scatter"}
         ).return_dict(),
-        "basegame": ConstructConditions(hr=3.5, rtp=0.585).return_dict(),
+        "basegame": ConstructConditions(hr=3.5, rtp=0.66).return_dict(),
     }
     if include_zero:
         conditions["0"] = ConstructConditions(rtp=0, av_win=0, search_conditions=0).return_dict()

@@ -32,38 +32,38 @@ class GameConfig(Config):
 
         t1, t2, t3, t4 = (8, 8), (9, 10), (11, 13), (14, 49)
         pay_group = {
-            (t1, "H1"): 3.0,
-            (t2, "H1"): 7.5,
-            (t3, "H1"): 15.0,
-            (t4, "H1"): 60.0,
-            (t1, "H2"): 2.0,
-            (t2, "H2"): 5.0,
-            (t3, "H2"): 10.0,
-            (t4, "H2"): 40.0,
-            (t1, "H3"): 1.3,
-            (t2, "H3"): 3.2,
-            (t3, "H3"): 7.0,
-            (t4, "H3"): 30.0,
-            (t1, "H4"): 1.0,
-            (t2, "H4"): 2.5,
-            (t3, "H4"): 6.0,
-            (t4, "H4"): 20.0,
+            (t1, "H1"): 3.5,
+            (t2, "H1"): 8.7,
+            (t3, "H1"): 20.8,
+            (t4, "H1"): 86.0,
+            (t1, "H2"): 2.4,
+            (t2, "H2"): 6.1,
+            (t3, "H2"): 13.8,
+            (t4, "H2"): 55.0,
+            (t1, "H3"): 1.6,
+            (t2, "H3"): 3.8,
+            (t3, "H3"): 9.5,
+            (t4, "H3"): 38.0,
+            (t1, "H4"): 1.2,
+            (t2, "H4"): 3.1,
+            (t3, "H4"): 6.9,
+            (t4, "H4"): 26.0,
             (t1, "L1"): 0.6,
-            (t2, "L1"): 1.5,
-            (t3, "L1"): 4.0,
-            (t4, "L1"): 10.0,
+            (t2, "L1"): 1.7,
+            (t3, "L1"): 4.8,
+            (t4, "L1"): 14.0,
             (t1, "L2"): 0.4,
             (t2, "L2"): 1.2,
             (t3, "L2"): 3.5,
-            (t4, "L2"): 8.0,
+            (t4, "L2"): 10.4,
             (t1, "L3"): 0.2,
             (t2, "L3"): 0.8,
-            (t3, "L3"): 2.5,
-            (t4, "L3"): 5.0,
-            (t1, "L4"): 0.1,
+            (t3, "L3"): 2.4,
+            (t4, "L3"): 6.9,
+            (t1, "L4"): 0.14,
             (t2, "L4"): 0.5,
-            (t3, "L4"): 1.5,
-            (t4, "L4"): 4.0,
+            (t3, "L4"): 1.7,
+            (t4, "L4"): 4.8,
         }
         self.paytable = self.convert_range_table(pay_group)
 
@@ -73,6 +73,7 @@ class GameConfig(Config):
             "scatter": ["S"],
             "bomb_a": ["SA"],
             "bomb_b": ["SB"],
+            "non_winnable": ["N"],
         }
 
         self.freespin_triggers = {
@@ -89,7 +90,7 @@ class GameConfig(Config):
         self.mode_bonus_areas = {
             "base": 1,
             "bonus_hotspots": 5,
-            "bonus_volatile": 1,
+            "bonus_volatile": 3,
             "bonus_fs": 1,
         }
         self.mode_volatile_base = {
@@ -98,11 +99,11 @@ class GameConfig(Config):
             "bonus_volatile": True,
             "bonus_fs": False,
         }
-        self.mode_guarantee_pair = {
-            "base": False,
-            "bonus_hotspots": False,
-            "bonus_volatile": True,
-            "bonus_fs": False,
+        self.mode_min_explosions = {
+            "base": 0,
+            "bonus_hotspots": 0,
+            "bonus_volatile": 3,
+            "bonus_fs": 0,
         }
         self.mode_guarantee_fs = {
             "base": False,
@@ -111,7 +112,7 @@ class GameConfig(Config):
             "bonus_fs": True,
         }
 
-        reels = {"BR0": "BR0.csv", "FR0": "FR0.csv", "WCAP": "WCAP.csv"}
+        reels = {"BR0": "BR0.csv", "FR0": "FR0.csv", "VR0": "VR0.csv", "WCAP": "WCAP.csv"}
         self.reels = {}
         for reel_id, filename in reels.items():
             self.reels[reel_id] = self.read_reels_csv(os.path.join(self.reels_path, filename))
@@ -135,14 +136,25 @@ class GameConfig(Config):
             self.freegame_type: {"FR0": 1, "WCAP": 5},
         }
 
-        def base_like_distributions(include_zero: bool = True):
+        volatile_reel_weights = {
+            self.basegame_type: {"VR0": 1},
+            self.freegame_type: {"FR0": 1},
+        }
+        volatile_wincap_reel_weights = {
+            self.basegame_type: {"VR0": 1},
+            self.freegame_type: {"FR0": 1, "WCAP": 5},
+        }
+
+        def base_like_distributions(include_zero: bool = True, reel_weights=None, wincap_weights=None):
+            weights = reel_weights or base_reel_weights
+            cap_weights = wincap_weights or wincap_reel_weights
             distributions = [
                 Distribution(
                     criteria="wincap",
                     quota=0.001,
                     win_criteria=mode_maxwins["base"],
                     conditions={
-                        "reel_weights": wincap_reel_weights,
+                        "reel_weights": cap_weights,
                         "force_wincap": True,
                         "force_freegame": True,
                     },
@@ -151,7 +163,7 @@ class GameConfig(Config):
                     criteria="freegame",
                     quota=0.1,
                     conditions={
-                        "reel_weights": base_reel_weights,
+                        "reel_weights": weights,
                         "force_wincap": False,
                         "force_freegame": True,
                     },
@@ -164,7 +176,7 @@ class GameConfig(Config):
                         quota=0.4,
                         win_criteria=0.0,
                         conditions={
-                            "reel_weights": {self.basegame_type: {"BR0": 1}},
+                            "reel_weights": weights,
                             "force_wincap": False,
                             "force_freegame": False,
                         },
@@ -179,7 +191,7 @@ class GameConfig(Config):
                     criteria="basegame",
                     quota=basegame_quota,
                     conditions={
-                        "reel_weights": {self.basegame_type: {"BR0": 1}},
+                        "reel_weights": weights,
                         "force_wincap": False,
                         "force_freegame": False,
                     },
@@ -223,7 +235,7 @@ class GameConfig(Config):
             ),
             BetMode(
                 name="bonus_hotspots",
-                cost=5.0,
+                cost=2.3,
                 rtp=self.rtp,
                 max_win=mode_maxwins["bonus_hotspots"],
                 auto_close_disabled=False,
@@ -233,17 +245,21 @@ class GameConfig(Config):
             ),
             BetMode(
                 name="bonus_volatile",
-                cost=10.0,
+                cost=15.7,
                 rtp=self.rtp,
                 max_win=mode_maxwins["bonus_volatile"],
                 auto_close_disabled=False,
                 is_feature=False,
                 is_buybonus=True,
-                distributions=base_like_distributions(include_zero=False),
+                distributions=base_like_distributions(
+                    include_zero=False,
+                    reel_weights=volatile_reel_weights,
+                    wincap_weights=volatile_wincap_reel_weights,
+                ),
             ),
             BetMode(
                 name="bonus_fs",
-                cost=25.0,
+                cost=17.8,
                 rtp=self.rtp,
                 max_win=mode_maxwins["bonus_fs"],
                 auto_close_disabled=False,

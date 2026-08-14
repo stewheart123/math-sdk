@@ -172,11 +172,9 @@ class GameExecutables(GameCalculations):
 
     def resolve_board(self) -> None:
         """Pay cascades first, then simultaneous SA+SB blasts, until the board settles."""
-        guarantee_pair = (
-            self.gametype == self.config.basegame_type
-            and self.config.mode_guarantee_pair.get(self.betmode, False)
-            and not self.volatile_pair_forced
-        )
+        min_explosions = 0
+        if self.gametype == self.config.basegame_type:
+            min_explosions = self.config.mode_min_explosions.get(self.betmode, 0)
         steps = 0
         while not self.wincap_triggered and steps < self.config.max_cascade_steps:
             steps += 1
@@ -186,16 +184,14 @@ class GameExecutables(GameCalculations):
                 self.tumble_game_board()
                 continue
 
-            if guarantee_pair:
-                if not self.find_sa_sb_pairs():
-                    self.force_volatile_pair()
-                self.volatile_pair_forced = True
-                guarantee_pair = False
+            if self.explosion_waves < min_explosions and not self.find_sa_sb_pairs():
+                self.force_volatile_pair()
 
             pairs = self.find_sa_sb_pairs()
             if not pairs:
                 break
             self.explode_pairs(pairs)
+            self.explosion_waves += 1
             self.tumble_game_board()
 
         self.set_end_tumble_event()

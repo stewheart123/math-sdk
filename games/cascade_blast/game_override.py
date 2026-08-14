@@ -12,6 +12,7 @@ class GameStateOverride(GameExecutables):
         self.bonus_areas = []
         self.bonus_area_set = set()
         self.volatile_pair_forced = False
+        self.explosion_waves = 0
 
     def assign_special_sym_function(self):
         self.special_symbol_functions = {}

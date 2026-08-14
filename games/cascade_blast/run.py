@@ -11,17 +11,17 @@ from src.write_data.write_configs import generate_configs
 
 if __name__ == "__main__":
 
-    num_threads = 1
+    num_threads = 4
     rust_threads = 20
-    batching_size = 10000
-    compression = False
+    batching_size = 5000
+    compression = True
     profiling = False
 
     num_sim_args = {
-        "base": int(1e3),
-        "bonus_hotspots": int(1e3),
-        "bonus_volatile": int(1e3),
-        "bonus_fs": int(1e3),
+        "base": int(1e4),
+        "bonus_hotspots": int(1e4),
+        "bonus_volatile": int(1e4),
+        "bonus_fs": int(1e4),
     }
 
     run_conditions = {
