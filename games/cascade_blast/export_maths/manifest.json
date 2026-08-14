@@ -1,0 +1,95 @@
+{
+  "gameID": "cascade_blast",
+  "config": "config_fe_cascade_blast.json",
+  "books": {
+    "base": "books_base.jsonl",
+    "bonus_hotspots": "books_bonus_hotspots.jsonl",
+    "bonus_volatile": "books_bonus_volatile.jsonl",
+    "bonus_fs": "books_bonus_fs.jsonl"
+  },
+  "curated_samples": {
+    "base": {
+      "file": "samples/base_samples.json",
+      "scenarios": [
+        "zero",
+        "win",
+        "pay_tumble",
+        "explosion_normal",
+        "explosion_volatile",
+        "freegame",
+        "bonus_area_reveal",
+        "bonus_area_update",
+        "three_plus_explosions"
+      ]
+    },
+    "bonus_hotspots": {
+      "file": "samples/bonus_hotspots_samples.json",
+      "scenarios": [
+        "zero",
+        "win",
+        "pay_tumble",
+        "explosion_normal",
+        "explosion_volatile",
+        "freegame",
+        "bonus_area_reveal",
+        "bonus_area_update",
+        "three_plus_explosions",
+        "five_bonus_tiles"
+      ]
+    },
+    "bonus_volatile": {
+      "file": "samples/bonus_volatile_samples.json",
+      "scenarios": [
+        "zero",
+        "win",
+        "pay_tumble",
+        "explosion_volatile",
+        "freegame",
+        "bonus_area_reveal",
+        "bonus_area_update",
+        "force_pair",
+        "three_plus_explosions",
+        "three_bonus_tiles"
+      ]
+    },
+    "bonus_fs": {
+      "file": "samples/bonus_fs_samples.json",
+      "scenarios": [
+        "zero",
+        "win",
+        "pay_tumble",
+        "explosion_normal",
+        "explosion_volatile",
+        "freegame",
+        "bonus_area_reveal",
+        "bonus_area_update",
+        "three_plus_explosions",
+        "guaranteed_fs"
+      ]
+    }
+  },
+  "event_catalogs": {
+    "base": "events/event_config_base.json",
+    "bonus_hotspots": "events/event_config_bonus_hotspots.json",
+    "bonus_volatile": "events/event_config_bonus_volatile.json",
+    "bonus_fs": "events/event_config_bonus_fs.json"
+  },
+  "bet_modes": {
+    "base": {
+      "cost": 1.0,
+      "buyBonus": false
+    },
+    "bonus_hotspots": {
+      "cost": 2.3,
+      "buyBonus": true
+    },
+    "bonus_volatile": {
+      "cost": 15.7,
+      "buyBonus": true
+    },
+    "bonus_fs": {
+      "cost": 17.8,
+      "buyBonus": true
+    }
+  }
+}
