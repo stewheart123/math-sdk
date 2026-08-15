@@ -4,11 +4,11 @@ import os
 import random
 
 REELS_PATH = os.path.join(os.path.dirname(__file__), "reels")
-NUM_REELS = 7
+NUM_REELS = 6
 STRIP_LENGTH = 1000
 
 # Weights sum to 100 so a 1000-stop strip is 10 copies per weight point.
-# N is a non-paying filler so 8-of-a-kind is not almost automatic on a 7x7.
+# N filler removed; that occupancy moved into SA/SB so 8-of-a-kind stays rare on 6x6.
 BASE_WEIGHTS = {
     "H1": 4,
     "H2": 5,
@@ -18,9 +18,8 @@ BASE_WEIGHTS = {
     "L2": 10,
     "L3": 11,
     "L4": 12,
-    "SA": 5,
-    "SB": 5,
-    "N": 26,
+    "SA": 18,
+    "SB": 18,
 }
 
 FS_WEIGHTS = {
@@ -32,9 +31,8 @@ FS_WEIGHTS = {
     "L2": 10,
     "L3": 11,
     "L4": 12,
-    "SA": 12,
-    "SB": 12,
-    "N": 8,
+    "SA": 16,
+    "SB": 16,
 }
 
 WCAP_WEIGHTS = {
@@ -46,9 +44,8 @@ WCAP_WEIGHTS = {
     "L2": 3,
     "L3": 2,
     "L4": 2,
-    "SA": 9,
-    "SB": 9,
-    "N": 5,
+    "SA": 12,
+    "SB": 11,
 }
 
 # Paying-dense strip for the volatile buy. Pairs are forced; value comes from post-blast cascades.
@@ -61,9 +58,8 @@ VOLATILE_WEIGHTS = {
     "L2": 12,
     "L3": 13,
     "L4": 14,
-    "SA": 6,
-    "SB": 6,
-    "N": 5,
+    "SA": 9,
+    "SB": 8,
 }
 
 

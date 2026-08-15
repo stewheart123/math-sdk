@@ -1,4 +1,4 @@
-"""Cascade Blast configuration: 7x7 pay-anywhere cascade with bonus areas and SA+SB blasts."""
+"""Cascade Blast configuration: 6x6 pay-anywhere cascade with bonus areas and SA+SB blasts."""
 
 import os
 from src.config.config import Config
@@ -27,10 +27,10 @@ class GameConfig(Config):
         self.rtp = 0.965
         self.construct_paths()
 
-        self.num_reels = 7
-        self.num_rows = [7] * self.num_reels
+        self.num_reels = 6
+        self.num_rows = [6] * self.num_reels
 
-        t1, t2, t3, t4 = (8, 8), (9, 10), (11, 13), (14, 49)
+        t1, t2, t3, t4 = (8, 8), (9, 10), (11, 13), (14, 36)
         pay_group = {
             (t1, "H1"): 3.5,
             (t2, "H1"): 8.7,
@@ -73,7 +73,6 @@ class GameConfig(Config):
             "scatter": ["S"],
             "bomb_a": ["SA"],
             "bomb_b": ["SB"],
-            "non_winnable": ["N"],
         }
 
         self.freespin_triggers = {

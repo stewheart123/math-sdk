@@ -1,12 +1,18 @@
 Cascade Blast — Frontend math export
 ====================================
 
+STALE PACK — do not treat these books as current math.
+The game config is now 6x6 with no filler N. The jsonl / samples / events /
+config_fe_cascade_blast.json in this folder are still the previous 7x7+N
+export. Regenerating books is a later maths pass (run_fe_samples.py then
+export_fe_maths.py). Use the web-sdk prompt below as the target contract.
+
 Copy this entire folder into the FE project's "export maths" directory.
 
 Contents
 --------
-config_fe_cascade_blast.json   Game config (7x7, 96.5% RTP, buy modes)
-books_base.jsonl               100 sample base rounds
+config_fe_cascade_blast.json   Game config (STALE 7x7+N; target is 6x6, no N)
+books_base.jsonl               100 sample base rounds (stale)
 books_bonus_hotspots.jsonl     100 sample hotspot buys (5 tiles, cost 2.3x)
 books_bonus_volatile.jsonl     100 sample volatile buys (3 tiles, cost 15.7x)
 books_bonus_fs.jsonl           100 sample FS buys (always 10 FS, cost 17.8x)
@@ -23,6 +29,7 @@ bonus_volatile    cost 15.7x   buyBonus
 bonus_fs          cost 17.8x   buyBonus
 
 RTP 96.5%. Max win 5000x. payoutMultiplier in books is integer cents (100 = 1.0x).
+Buy costs are stale from the 7x7+N probe.
 
 What this is NOT
 ----------------
@@ -51,6 +58,9 @@ It plays `book.events` in order. Copy the `export_maths` folder from math-sdk
 area. Use those JSONL books and `samples/*_samples.json` for Storybook
 (`base_books.ts`, `bonus_books.ts`, `*_events.ts`).
 
+The jsonl/samples currently in that folder may still be a stale 7x7+N pack.
+Target contract below is 6x6 with no filler N. Do not invent an N asset.
+
 Closest template: a pay-anywhere / cluster / tumble scatter game, NOT lines
 and NOT card-ways. Fork the nearest tumble+scatter app.
 
@@ -61,9 +71,10 @@ and NOT card-ways. Fork the nearest tumble+scatter app.
 - workingName: Cascade Blast
 - RTP: 96.5%
 - max win: 5000x
-- Grid: 7 reels x 7 rows
-- Win type: scatter / pay-anywhere (8+ of a kind anywhere on the 7x7)
+- Grid: 6 reels x 6 rows
+- Win type: scatter / pay-anywhere (8+ of a kind anywhere on the 6x6)
 - No wilds
+- No filler / non_winnable symbol
 
 Bet modes:
 - base            cost 1.0    feature=true   buyBonus=false
@@ -76,10 +87,10 @@ Buy-bonus RGS calls use those exact mode names.
 ------------------------------------------------
 2. Coordinates and padding
 ------------------------------------------------
-include_padding is ON. Every reveal board is 7 columns x 9 rows:
-  [0] = top padding symbol (not in the 7x7 window)
-  [1]..[7] = visible 7x7 (math row 0 is the TOP of the window)
-  [8] = bottom padding symbol
+include_padding is ON. Every reveal board is 6 columns x 8 rows:
+  [0] = top padding symbol (not in the 6x6 window)
+  [1]..[6] = visible 6x6 (math row 0 is the TOP of the window)
+  [7] = bottom padding symbol
 
 ALL position fields in events already use client/padded rows (math row + 1):
 bonusAreaReveal, bonusAreaUpdate, explosion, forcePair, winInfo, tumbleBoard
@@ -91,20 +102,21 @@ Visible cell (reel, mathRow) => event position { reel, row: mathRow + 1 }.
 3. Symbols
 ------------------------------------------------
 Paying: H1, H2, H3, H4, L1, L2, L3, L4
-Filler: N   (flag non_winnable: true — never pays, can be exploded/tumbled)
 Special:
   S   scatter: true     free-spin symbol
   SA  bomb_a: true      left bomb
   SB  bomb_b: true      right bomb
 
+There is no N / non_winnable filler.
+
 Pay bands (count of matching paying symbol anywhere): 8 / 9-10 / 11-13 / 14+.
-See config_fe_cascade_blast.json paytables. N, S, SA, SB never form a pay.
+See config_fe_cascade_blast.json paytables (stale until regen). S, SA, SB never form a pay.
 
 ------------------------------------------------
 4. How a spin works (play events, do not re-simulate)
 ------------------------------------------------
 Base spin:
-1. bonusAreaReveal — highlight existing 7x7 cell(s) as a BACKDROP on the frame.
+1. bonusAreaReveal — highlight existing 6x6 cell(s) as a BACKDROP on the frame.
    Not a separate overlay grid. Any symbol can sit on a highlighted cell.
    The highlight is chosen at spin start and does NOT move with gravity.
    Counts: base=1, bonus_hotspots=5, bonus_volatile=3, bonus_fs=1.
@@ -134,7 +146,7 @@ Explosions:
   plus every cell ABOVE them in those two columns (row 0 / client row 1 is top).
 - explosion.mode "volatile" (all free spins, and every blast during
   bonus_volatile including the base spin): full column of SA + full column of
-  SB + the entire shared row (~19 cells for one pair).
+  SB + the entire shared row (~16 cells for one pair).
 - explosion.pairs gives each SA/SB pair. explosion.positions is the union of
   cells to remove (already padded, S never included).
 - Unpaired SA/SB survive unless they sit inside another pair's blast.
@@ -170,7 +182,7 @@ Typical curated labels:
 6. Implementation checklist
 ------------------------------------------------
 1. Fork closest tumble/scatter app. Set gameID to cascade_blast.
-2. 7x7 window with padding row above and below. Wire symbols + flags.
+2. 6x6 window with padding row above and below (reveal is 6x8). Wire symbols + flags. No N.
 3. Bonus-area backdrop on existing cells from bonusAreaReveal / Update.
    Do not invent a second board.
 4. Play tumbleBoard (explodingSymbols + newSymbols falling from the top).

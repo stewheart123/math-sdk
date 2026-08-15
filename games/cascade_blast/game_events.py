@@ -19,7 +19,7 @@ def _client_positions(gamestate, cells):
 
 
 def bonus_area_reveal_event(gamestate) -> None:
-    """Highlight bonus-area cells on the existing 7x7 frame."""
+    """Highlight bonus-area cells on the existing 6x6 frame."""
     event = {
         "index": len(gamestate.book.events),
         "type": BONUS_AREA_REVEAL,

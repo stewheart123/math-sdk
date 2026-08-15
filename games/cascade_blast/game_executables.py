@@ -38,7 +38,7 @@ class GameExecutables(GameCalculations):
         self.get_special_symbols_on_board()
 
     def pick_bonus_areas(self) -> None:
-        """Mark N unique cells on the existing 7x7 frame as bonus-area backdrops."""
+        """Mark N unique cells on the existing 6x6 frame as bonus-area backdrops."""
         count = self.config.mode_bonus_areas.get(self.betmode, 1)
         cells = [
             (reel, row)
