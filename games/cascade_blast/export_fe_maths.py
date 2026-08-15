@@ -193,9 +193,9 @@ def main():
         "event_catalogs": {},
         "bet_modes": {
             "base": {"cost": 1.0, "buyBonus": False},
-            "bonus_hotspots": {"cost": 2.3, "buyBonus": True},
-            "bonus_volatile": {"cost": 15.7, "buyBonus": True},
-            "bonus_fs": {"cost": 17.8, "buyBonus": True},
+            "bonus_hotspots": {"cost": 2.1, "buyBonus": True},
+            "bonus_volatile": {"cost": 6.6, "buyBonus": True},
+            "bonus_fs": {"cost": 11.8, "buyBonus": True},
         },
     }
 

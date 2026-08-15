@@ -48,8 +48,7 @@
         "bonus_area_reveal",
         "bonus_area_update",
         "force_pair",
-        "three_plus_explosions",
-        "three_bonus_tiles"
+        "three_plus_explosions"
       ]
     },
     "bonus_fs": {
@@ -62,7 +61,6 @@
         "explosion_volatile",
         "freegame",
         "bonus_area_reveal",
-        "bonus_area_update",
         "three_plus_explosions",
         "guaranteed_fs"
       ]
@@ -80,15 +78,15 @@
       "buyBonus": false
     },
     "bonus_hotspots": {
-      "cost": 2.3,
+      "cost": 2.1,
       "buyBonus": true
     },
     "bonus_volatile": {
-      "cost": 15.7,
+      "cost": 6.6,
       "buyBonus": true
     },
     "bonus_fs": {
-      "cost": 17.8,
+      "cost": 11.8,
       "buyBonus": true
     }
   }

@@ -1,21 +1,15 @@
 Cascade Blast — Frontend math export
 ====================================
 
-STALE PACK — do not treat these books as current math.
-The game config is now 6x6 with no filler N. The jsonl / samples / events /
-config_fe_cascade_blast.json in this folder are still the previous 7x7+N
-export. Regenerating books is a later maths pass (run_fe_samples.py then
-export_fe_maths.py). Use the web-sdk prompt below as the target contract.
-
 Copy this entire folder into the FE project's "export maths" directory.
 
 Contents
 --------
-config_fe_cascade_blast.json   Game config (STALE 7x7+N; target is 6x6, no N)
-books_base.jsonl               100 sample base rounds (stale)
-books_bonus_hotspots.jsonl     100 sample hotspot buys (5 tiles, cost 2.3x)
-books_bonus_volatile.jsonl     100 sample volatile buys (stale 3-tile pack; target is 1 tile, cost 15.7x)
-books_bonus_fs.jsonl           100 sample FS buys (always 10 FS, cost 17.8x)
+config_fe_cascade_blast.json   Game config (6x6, 96.5% RTP, buy modes)
+books_base.jsonl               100 sample base rounds
+books_bonus_hotspots.jsonl     100 sample hotspot buys (5 tiles, cost 2.1x)
+books_bonus_volatile.jsonl     100 sample volatile buys (1 tile, cost 6.6x)
+books_bonus_fs.jsonl           100 sample FS buys (S lands on tile, cost 11.8x)
 samples/                       Curated scenario picks for Storybook mocks
 events/                        One example payload per bookEvent type, per mode
 manifest.json                  Index of files, modes, and scenario labels
@@ -24,12 +18,11 @@ README.txt                     This file (includes the web-sdk prompt below)
 Bet modes (RGS mode names — must match upload)
 ----------------------------------------------
 base              cost 1.0x    feature spin
-bonus_hotspots    cost 2.3x    buyBonus
-bonus_volatile    cost 15.7x   buyBonus
-bonus_fs          cost 17.8x   buyBonus
+bonus_hotspots    cost 2.1x    buyBonus
+bonus_volatile    cost 6.6x    buyBonus
+bonus_fs          cost 11.8x   buyBonus
 
 RTP 96.5%. Max win 5000x. payoutMultiplier in books is integer cents (100 = 1.0x).
-Buy costs are stale from the 7x7+N probe.
 
 What this is NOT
 ----------------
@@ -58,8 +51,7 @@ It plays `book.events` in order. Copy the `export_maths` folder from math-sdk
 area. Use those JSONL books and `samples/*_samples.json` for Storybook
 (`base_books.ts`, `bonus_books.ts`, `*_events.ts`).
 
-The jsonl/samples currently in that folder may still be a stale 7x7+N pack.
-Target contract below is 6x6 with no filler N. Do not invent an N asset.
+Do not invent an N asset. There is no filler symbol.
 
 Closest template: a pay-anywhere / cluster / tumble scatter game, NOT lines
 and NOT card-ways. Fork the nearest tumble+scatter app.
@@ -78,9 +70,9 @@ and NOT card-ways. Fork the nearest tumble+scatter app.
 
 Bet modes:
 - base            cost 1.0    feature=true   buyBonus=false
-- bonus_hotspots  cost 2.3    feature=false  buyBonus=true
-- bonus_volatile  cost 15.7   feature=false  buyBonus=true
-- bonus_fs        cost 17.8   feature=false  buyBonus=true
+- bonus_hotspots  cost 2.1    feature=false  buyBonus=true
+- bonus_volatile  cost 6.6    feature=false  buyBonus=true
+- bonus_fs        cost 11.8   feature=false  buyBonus=true
 
 Buy-bonus RGS calls use those exact mode names.
 
@@ -110,7 +102,7 @@ Special:
 There is no N / non_winnable filler.
 
 Pay bands (count of matching paying symbol anywhere): 8 / 9-10 / 11-13 / 14+.
-See config_fe_cascade_blast.json paytables (stale until regen). S, SA, SB never form a pay.
+See config_fe_cascade_blast.json paytables. S, SA, SB never form a pay.
 
 ------------------------------------------------
 4. How a spin works (play events, do not re-simulate)
@@ -190,7 +182,7 @@ Typical curated labels:
 6. Handle forcePair before the guaranteed volatile blasts.
 7. FS: 10 spins, no retrigger, no S, no bonus tiles, always volatile blasts.
 8. Buy bonus UI: three products mapped to bonus_hotspots / bonus_volatile /
-   bonus_fs at 2.3x / 15.7x / 17.8x.
+   bonus_fs at 2.1x / 6.6x / 11.8x.
 9. Storybook: MODE_BASE + one story set per buy mode. Paste curated samples
    into bookEvent stories. Play books/random from the jsonl files.
 10. Amounts: event amounts and payoutMultiplier are integer cents

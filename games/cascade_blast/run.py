@@ -1,4 +1,4 @@
-"""Generate books for Cascade Blast. Optimization is off until weights are retuned."""
+"""Generate books for Cascade Blast."""
 
 from gamestate import GameState
 from game_config import GameConfig

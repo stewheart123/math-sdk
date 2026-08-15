@@ -32,18 +32,14 @@ Checked only after paying wins have fully resolved.
 
 ## Bonus buys
 
-* bonus_hotspots (2.3x): 5 unique bonus-area cells on the same 6x6 frame.
-* bonus_volatile (15.7x): VR0 paying-dense reels, 1 bonus tile, at least 3 volatile blasts per spin. Extra natural pairs also explode volatile.
-* bonus_fs (17.8x): 1 bonus tile placed on the cell S will occupy after settle. S must sit on it to enter 10 free spins (always does on this buy).
+* bonus_hotspots (2.1x): 5 unique bonus-area cells on the same 6x6 frame.
+* bonus_volatile (6.6x): VR0 paying-dense reels, 1 bonus tile, at least 3 volatile blasts per spin. Extra natural pairs also explode volatile.
+* bonus_fs (11.8x): 1 bonus tile placed on the cell S will occupy after settle. S must sit on it to enter 10 free spins (always does on this buy).
 
-Buy costs are stale from the 7x7+N probe. Re-snap to EV / 0.965 after the next maths pass.
-
-bonus_volatile has no 0-win simulation fence: a guaranteed explosion almost always pays, so forcing 0x books does not terminate.
+Buy costs snapped to EV / 0.965 from the 6x6 natural probe (2k spins) after paytable scale.
 
 ## v1 notes
 
-Config pass: 6x6, filler N removed, N weight moved into SA/SB. Natural probe, pay/buy-cost retune, and book regen are later. Probe with:
+6x6, no filler N, extra SA/SB occupancy. Buy costs from 2k natural probe. Probe with:
 
     python games/cascade_blast/measure_natural.py
-
-Optimizer is still disabled in run.py.
