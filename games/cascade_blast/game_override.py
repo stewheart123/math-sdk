@@ -11,6 +11,7 @@ class GameStateOverride(GameExecutables):
         self.tumble_win = 0
         self.bonus_areas = []
         self.bonus_area_set = set()
+        self.forced_bonus_cells = None
         self.volatile_pair_forced = False
         self.explosion_waves = 0
 

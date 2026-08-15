@@ -89,7 +89,7 @@ class GameConfig(Config):
         self.mode_bonus_areas = {
             "base": 1,
             "bonus_hotspots": 5,
-            "bonus_volatile": 3,
+            "bonus_volatile": 1,
             "bonus_fs": 1,
         }
         self.mode_volatile_base = {
@@ -108,7 +108,7 @@ class GameConfig(Config):
             "base": False,
             "bonus_hotspots": False,
             "bonus_volatile": False,
-            "bonus_fs": True,
+            "bonus_fs": False,
         }
 
         reels = {"BR0": "BR0.csv", "FR0": "FR0.csv", "VR0": "VR0.csv", "WCAP": "WCAP.csv"}

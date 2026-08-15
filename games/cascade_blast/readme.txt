@@ -33,8 +33,8 @@ Checked only after paying wins have fully resolved.
 ## Bonus buys
 
 * bonus_hotspots (2.3x): 5 unique bonus-area cells on the same 6x6 frame.
-* bonus_volatile (15.7x): VR0 paying-dense reels, 3 bonus tiles, at least 3 volatile blasts per spin. Extra natural pairs also explode volatile.
-* bonus_fs (17.8x): always enter 10 free spins after the base spin settles, even if S drifted off the highlight.
+* bonus_volatile (15.7x): VR0 paying-dense reels, 1 bonus tile, at least 3 volatile blasts per spin. Extra natural pairs also explode volatile.
+* bonus_fs (17.8x): 1 bonus tile placed on the cell S will occupy after settle. S must sit on it to enter 10 free spins (always does on this buy).
 
 Buy costs are stale from the 7x7+N probe. Re-snap to EV / 0.965 after the next maths pass.
 

@@ -11,11 +11,13 @@ class GameState(GameStateOverride):
         self.repeat = True
         while self.repeat:
             self.reset_book()
-            self.draw_board()
-            self.resolve_board()
+            self.draw_and_resolve_base()
             self.win_manager.update_gametype_wins(self.gametype)
 
-            if self.get_current_distribution_conditions().get("force_freegame"):
+            if (
+                self.betmode != "bonus_fs"
+                and self.get_current_distribution_conditions().get("force_freegame")
+            ):
                 self.ensure_scatter_on_bonus_area()
 
             if self.check_fs_condition() and self.check_freespin_entry():

@@ -152,10 +152,6 @@ def pick_curated_samples(books, mode_name):
         criteria["five_bonus_tiles"] = lambda b: (
             (event_of(b, "bonusAreaReveal") or {}).get("positions") or []
         ) and len((event_of(b, "bonusAreaReveal") or {}).get("positions") or []) >= 5
-    elif mode_name == "bonus_volatile":
-        criteria["three_bonus_tiles"] = lambda b: len(
-            (event_of(b, "bonusAreaReveal") or {}).get("positions") or []
-        ) >= 3
     elif mode_name == "bonus_fs":
         criteria["guaranteed_fs"] = lambda b: "freeSpinTrigger" in event_types(b)
 

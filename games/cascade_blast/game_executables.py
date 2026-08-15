@@ -16,14 +16,20 @@ from src.events.events import fs_trigger_event, reveal_event, set_total_event, s
 class GameExecutables(GameCalculations):
     """Game specific executable functions."""
 
-    def draw_board(self, emit_event: bool = True, trigger_symbol: str = "scatter") -> None:
+    def draw_board(
+        self,
+        emit_event: bool = True,
+        trigger_symbol: str = "scatter",
+        skip_bonus_areas: bool = False,
+    ) -> None:
         """Draw a board without the stock scatter-count reject/force loop."""
         self.create_board_reelstrips()
         if self.gametype == self.config.basegame_type:
             self.implant_scatter()
-            self.pick_bonus_areas()
-            if emit_event:
-                bonus_area_reveal_event(self)
+            if not skip_bonus_areas:
+                self.pick_bonus_areas()
+                if emit_event:
+                    bonus_area_reveal_event(self)
         else:
             self.bonus_areas = []
             self.bonus_area_set = set()
@@ -38,19 +44,50 @@ class GameExecutables(GameCalculations):
         self.get_special_symbols_on_board()
 
     def pick_bonus_areas(self) -> None:
-        """Mark N unique cells on the existing 6x6 frame as bonus-area backdrops."""
-        count = self.config.mode_bonus_areas.get(self.betmode, 1)
-        cells = [
-            (reel, row)
-            for reel in range(self.config.num_reels)
-            for row in range(self.config.num_rows[reel])
-        ]
-        chosen = random.sample(cells, count)
+        """Mark unique cells on the existing 6x6 frame as bonus-area backdrops."""
+        forced = getattr(self, "forced_bonus_cells", None)
+        if forced:
+            chosen = list(forced)
+        else:
+            count = self.config.mode_bonus_areas.get(self.betmode, 1)
+            cells = [
+                (reel, row)
+                for reel in range(self.config.num_reels)
+                for row in range(self.config.num_rows[reel])
+            ]
+            chosen = random.sample(cells, count)
         self.bonus_areas = [{"reel": reel, "row": row} for reel, row in chosen]
         self.bonus_area_set = set(chosen)
 
+    def final_scatter_cell(self):
+        """Return the current S cell, or None."""
+        self.get_special_symbols_on_board()
+        positions = self.special_syms_on_board.get("scatter", [])
+        if not positions:
+            return None
+        return (positions[0]["reel"], positions[0]["row"])
+
+    def seed_bonus_area_from_final_scatter(self) -> None:
+        """Dry-run settle, then replay with the highlight already on S's final cell."""
+        sim = self.sim
+        self.draw_board(emit_event=False, skip_bonus_areas=True)
+        self.resolve_board()
+        cell = self.final_scatter_cell()
+        self.reset_seed(sim)
+        self.reset_book()
+        if cell is not None:
+            self.forced_bonus_cells = [cell]
+
+    def draw_and_resolve_base(self) -> None:
+        """Draw and settle the base board, seeding the FS-buy highlight from S's landing cell."""
+        if self.betmode == "bonus_fs" and self.gametype == self.config.basegame_type:
+            self.seed_bonus_area_from_final_scatter()
+        self.draw_board()
+        self.resolve_board()
+
     def scatter_on_bonus_area(self) -> bool:
         """True if the FS symbol currently sits on a highlighted frame cell."""
+        self.get_special_symbols_on_board()
         for pos in self.special_syms_on_board.get("scatter", []):
             if (pos["reel"], pos["row"]) in self.bonus_area_set:
                 return True
@@ -211,7 +248,7 @@ class GameExecutables(GameCalculations):
         fs_trigger_event(self, basegame_trigger=basegame_trigger, freegame_trigger=freegame_trigger)
 
     def check_fs_condition(self, scatter_key: str = "scatter") -> bool:
-        """FS only from base after settle: S on a bonus cell, or the guaranteed-FS buy."""
+        """FS only from base after settle: S on a bonus cell."""
         if self.gametype != self.config.basegame_type or self.repeat:
             return False
         if self.config.mode_guarantee_fs.get(self.betmode, False):

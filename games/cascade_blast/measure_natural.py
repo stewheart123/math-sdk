@@ -20,8 +20,7 @@ def run_natural_spin(gs: GameState, sim: int) -> dict:
     gs.reset_seed(sim)
     gs.reset_book()
     gs.repeat = False
-    gs.draw_board()
-    gs.resolve_board()
+    gs.draw_and_resolve_base()
     gs.win_manager.update_gametype_wins(gs.gametype)
 
     event_types = Counter(event["type"] for event in gs.book.events)

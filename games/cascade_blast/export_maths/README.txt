@@ -14,7 +14,7 @@ Contents
 config_fe_cascade_blast.json   Game config (STALE 7x7+N; target is 6x6, no N)
 books_base.jsonl               100 sample base rounds (stale)
 books_bonus_hotspots.jsonl     100 sample hotspot buys (5 tiles, cost 2.3x)
-books_bonus_volatile.jsonl     100 sample volatile buys (3 tiles, cost 15.7x)
+books_bonus_volatile.jsonl     100 sample volatile buys (stale 3-tile pack; target is 1 tile, cost 15.7x)
 books_bonus_fs.jsonl           100 sample FS buys (always 10 FS, cost 17.8x)
 samples/                       Curated scenario picks for Storybook mocks
 events/                        One example payload per bookEvent type, per mode
@@ -119,7 +119,7 @@ Base spin:
 1. bonusAreaReveal — highlight existing 6x6 cell(s) as a BACKDROP on the frame.
    Not a separate overlay grid. Any symbol can sit on a highlighted cell.
    The highlight is chosen at spin start and does NOT move with gravity.
-   Counts: base=1, bonus_hotspots=5, bonus_volatile=3, bonus_fs=1.
+   Counts: base=1, bonus_hotspots=5, bonus_volatile=1, bonus_fs=1.
 2. reveal — initial drop. Base always has exactly one S. S is not on reel
    strips; tumbles cannot add more S. S falls with gravity. S cannot be
    destroyed by pays or explosions.
@@ -131,10 +131,10 @@ Base spin:
    Then back to step 3 if new 8+ pays appear. Repeat until no pays and no pairs.
 5. setWin (if this spin paid) then setTotalWin.
 6. After the board is fully settled: if S sits on a bonus-area cell, emit
-   freeSpinTrigger (totalFs=10). bonus_fs buy always triggers 10 FS even if S
-   drifted off the tile. No retrigger. FS has no S and no bonus areas.
-   Forced-FS books may emit bonusAreaUpdate to snap a highlight under S
-   before the trigger — animate the highlight moving, then trigger.
+   freeSpinTrigger (totalFs=10). bonus_fs buy still requires that landing;
+   the highlight is already the cell S will occupy after settle, so it always
+   triggers. No retrigger. The highlight does not move (no bonusAreaUpdate
+   on this buy). FS has no S and no bonus areas.
 7. Free spins: updateFreeSpin, reveal (no bonusAreaReveal), same pay/explode
    loop with explosion.mode="volatile", setWin/setTotalWin. After 10 spins:
    freeSpinEnd, then finalWin.
@@ -176,7 +176,7 @@ Full rounds: samples/<mode>_samples.json and books_<mode>.jsonl
 Typical curated labels:
   zero, win, pay_tumble, explosion_normal, explosion_volatile, freegame,
   bonus_area_reveal, bonus_area_update, force_pair, three_plus_explosions,
-  five_bonus_tiles (hotspots), three_bonus_tiles (volatile), guaranteed_fs (bonus_fs)
+  five_bonus_tiles (hotspots), guaranteed_fs (bonus_fs)
 
 ------------------------------------------------
 6. Implementation checklist
